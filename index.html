@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IkanKu - Katalog Produk</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons (CDN) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font adjustment if needed */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-slate-800">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-blue-600 p-2 rounded-lg">
+                        <i data-lucide="fish" class="text-white h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-blue-900 leading-tight">IkanKu</h1>
+                        <p class="text-xs text-gray-500">Jualan Ikan dan Koin dari IkanKu</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="p-2 hover:bg-gray-100 rounded-full flex items-center gap-1 text-sm text-gray-600 font-medium">
+                        <i data-lucide="coins" class="h-5 w-5"></i>
+                        <span>1.250</span>
+                    </button>
+                    <button class="p-2 hover:bg-gray-100 rounded-full relative">
+                        <i data-lucide="shopping-cart" class="h-6 w-6 text-gray-600"></i>
+                        <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header Section -->
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Katalog Produk Ikan</h2>
+            <p class="mt-2 text-lg text-gray-600">Temukan Ikan Secret dan Koin dengan harga terbaik hari ini</p>
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 sticky top-20 z-40">
+            <div class="flex flex-col md:flex-row gap-4">
+                
+                <!-- Search Input -->
+                <div class="relative flex-grow">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="h-5 w-5 text-gray-400"></i>
+                    </div>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg leading-5 bg-gray-50 placeholder-gray-500 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out sm:text-sm"
+                        placeholder="Cari produk (misal: Megalodon)..."
+                    />
+                </div>
+
+                <!-- Category Dropdown -->
+                <div class="relative min-w-[200px]">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i data-lucide="filter" class="h-5 w-5 text-gray-400"></i>
+                    </div>
+                    <select
+                        id="categoryFilter"
+                        class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm appearance-none cursor-pointer"
+                    >
+                        <option value="Semua">Semua</option>
+                        <option value="Ikan Secret">Ikan Secret</option>
+                        <option value="Koin">Koin</option>
+                    </select>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Grid Container -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Produk akan dirender di sini menggunakan JavaScript -->
+        </div>
+
+        <!-- Not Found State (Hidden by default) -->
+        <div id="notFound" class="hidden text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300">
+            <div class="mx-auto h-12 w-12 text-gray-400 mb-4 flex justify-center items-center">
+                <i data-lucide="search" class="h-12 w-12"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900">Produk tidak ditemukan</h3>
+            <p class="mt-1 text-gray-500">Coba cari dengan kata kunci lain atau ubah filter kategori.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 IkanKu Inventory System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Data Produk ---
+        const DATA_BARANG = [
+            { id: 1, nama: "Big Shiny Ancient Lochness Monsters", kategori: "Ikan Secret", harga: 60000, stok: 1, unit: "Ukuran 381K Kg", image: "https://tr.rbxcdn.com/180DAY-7263c3f92e0b0384f3bd09f1bbb1ca7c/420/420/Image/Png/noFilter" }, 
+            { id: 2, nama: "Big Megalodon", kategori: "Ikan Secret", harga: 35000, stok: 1, unit: "Ukuran 434K Kg", image: "https://tr.rbxcdn.com/180DAY-4f77aa0bcdcfa908e42bad55c2544b79/420/420/Image/Png/noFilter" }, 
+            { id: 3, nama: "Elshark Gran Maja", kategori: "Ikan Secret", harga: 30000, stok: 1, unit: "Ukuran 554K Kg", image: "https://d1x91p7vw3vuq8.cloudfront.net/itemku-upload/20251020/7uilk36rpv6gk2pibkb8wc_thumbnail.jpg" }, 
+            { id: 4, nama: "Big King Jelly", kategori: "Ikan Secret", harga: 10000, stok: 1, unit: "Ukuran 181K Kg", image: "https://tr.rbxcdn.com/180DAY-92fc8bfa788c39623c28f22b0706adc0/420/420/Image/Png/noFilter" },
+            { id: 5, nama: "Ikan Secret Tumbal", kategori: "Ikan Secret", harga: 5000, stok: 10, unit: "Ekor", image: "https://tr.rbxcdn.com/180DAY-95e31005ee70d0dd081590e066e2d8a8/420/420/Image/Png/noFilter" },
+            { id: 8, nama: "Koin Via Ikan Mytos", kategori: "Koin", harga: 8000, stok: 10, unit: "1m", image: "https://tr.rbxcdn.com/180DAY-030ff045c8ccceca1c0b19b24201e1a8/420/420/Image/Png/noFilter" }
+        ];
+
+        // --- Helper Functions ---
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(angka);
+        }
+
+        function getStockBadge(stok) {
+            if (stok === 0) {
+                return `<span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full border border-red-200">Stok Habis</span>`;
+            } else if (stok < 10) {
+                return `<span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full border border-yellow-200">Stok Menipis: ${stok}</span>`;
+            } else {
+                return `<span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full border border-green-200">Tersedia: ${stok}</span>`;
+            }
+        }
+
+        function handleOrder(id) {
+            const item = DATA_BARANG.find(b => b.id === id);
+            if (item && item.stok > 0) {
+                const nomorWA = "6289527072944";
+                const pesan = `Halo Admin IkanKu, saya ingin memesan:\n\nProduk: *${item.nama}*\nJumlah: 1\n\nMohon info total harganya. Terima kasih!`;
+                const url = `https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`;
+                window.open(url, '_blank');
+            }
+        }
+
+        // --- Main Render Logic ---
+        
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const productGrid = document.getElementById('productGrid');
+        const notFound = document.getElementById('notFound');
+
+        function renderProducts() {
+            const kataKunci = searchInput.value.toLowerCase();
+            const kategori = categoryFilter.value;
+
+            const filtered = DATA_BARANG.filter(item => {
+                const cocokKategori = kategori === "Semua" || item.kategori === kategori;
+                const cocokKataKunci = item.nama.toLowerCase().includes(kataKunci);
+                return cocokKategori && cocokKataKunci;
+            });
+
+            // Clear previous content
+            productGrid.innerHTML = '';
+
+            if (filtered.length > 0) {
+                notFound.classList.add('hidden');
+                productGrid.classList.remove('hidden');
+
+                filtered.forEach(item => {
+                    const isHabis = item.stok === 0;
+                    
+                    // Check if image is URL or Emoji
+                    let imageContent = '';
+                    if (item.image.startsWith('http')) {
+                        imageContent = `<img src="${item.image}" alt="${item.nama}" class="h-full w-full object-cover">`;
+                    } else {
+                        imageContent = `<span class="text-6xl">${item.image}</span>`;
+                    }
+
+                    const cardHTML = `
+                        <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 ${isHabis ? 'opacity-75 grayscale-[0.5]' : ''}">
+                            
+                            <!-- Image Area -->
+                            <div class="h-40 bg-blue-50 flex items-center justify-center relative">
+                                ${imageContent}
+                                <div class="absolute top-3 right-3">
+                                    ${getStockBadge(item.stok)}
+                                </div>
+                            </div>
+
+                            <!-- Content Area -->
+                            <div class="p-5">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i data-lucide="tag" class="w-3 h-3 text-blue-500"></i>
+                                    <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">${item.kategori}</span>
+                                </div>
+                                
+                                <h3 class="text-lg font-bold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">${item.nama}</h3>
+                                
+                                <div class="flex items-baseline gap-1 mb-4">
+                                    <span class="text-sm text-gray-500">Harga:</span>
+                                    <span class="text-xl font-bold text-gray-900">${formatRupiah(item.harga)}</span>
+                                    <span class="text-xs text-gray-500">/${item.unit}</span>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                                    <div class="text-xs text-gray-500 flex items-center gap-1">
+                                        <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                                        <span>Unit: <b>${item.unit}</b></span>
+                                    </div>
+                                    
+                                    <button 
+                                        onclick="handleOrder(${item.id})"
+                                        class="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${!isHabis ? 'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}"
+                                        ${isHabis ? 'disabled' : ''}
+                                    >
+                                        <i data-lucide="phone" class="w-4 h-4"></i>
+                                        ${!isHabis ? 'Pesan' : 'Habis'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    productGrid.innerHTML += cardHTML;
+                });
+            } else {
+                productGrid.classList.add('hidden');
+                notFound.classList.remove('hidden');
+            }
+
+            // Re-initialize icons for new content
+            lucide.createIcons();
+        }
+
+        // --- Event Listeners ---
+        searchInput.addEventListener('input', renderProducts);
+        categoryFilter.addEventListener('change', renderProducts);
+
+        // --- Initial Render ---
+        renderProducts();
+        lucide.createIcons(); // Init navbar icons
+    </script>
+</body>
+</html>
